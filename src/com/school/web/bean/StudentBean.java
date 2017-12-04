@@ -40,6 +40,9 @@ public class StudentBean {
 	public int getMath() {
 		return this.math;
 	}
+	public String toString() {
+		return String.format("[이름] %s [ID] %s [비밀번호] %s", name , id , pass);
+	}
 }
 
 
