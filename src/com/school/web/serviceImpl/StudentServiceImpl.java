@@ -7,11 +7,11 @@ public class StudentServiceImpl implements StudentService {
 	private StudentBean[] students;
 	private int count;
 
-	public StudentServiceImpl(int count) {
+	public StudentServiceImpl() {
 		this.count = 0;
-		students = new StudentBean[count];
+		students = new StudentBean[3];
 	}
-
+		
 	@Override
 	public void setCount(int count) {
 		this.count = count;
@@ -24,8 +24,14 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public void addStudent(StudentBean student) {
-		this.students[count] = student;
-		count++;
+		if(count==students.length) {
+			StudentBean[] a = new StudentBean[count+3];
+			//students = new StudentBean[count+3];
+			System.arraycopy(students, 0 , a , 0 , count);
+			//집을 이사시켜준다.
+			students = a;
+		}
+		this.students[count++] = student;
 	}
 
 	@Override
@@ -70,21 +76,21 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public StudentBean[] findStudentByName(String name) {
-		StudentBean[] student =null;
+		StudentBean[] student = null;
 		int count = 0;
 		for (int i = 0; i < this.count; i++) {
 			if (name.equals(students[i].getName())) {
 				count++;
 			}
 		}
-		if(count!=0) {
+		if (count != 0) {
 			student = new StudentBean[count];
 		}
 		for (int i = 0, num = 0; i < this.count; i++) {
 			if (name.equals(students[i].getName())) {
 				student[num] = students[i];
 				num++;
-				if(num == count) {
+				if (num == count) {
 					break;
 				}
 
@@ -92,4 +98,31 @@ public class StudentServiceImpl implements StudentService {
 		}
 		return student;
 	}
-}
+
+	@Override
+	public void updatePassword(StudentBean student) {
+		// String id = student.getId();
+		for (int i = 0; i < count; i++) {
+			if (student.getId().equals(students[i].getId())) {
+				students[i].setPass(student.getPass());
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void deleteId(String id) {
+		for(int i =0; i < count; i ++) {
+			if(id.equals(students[i].getId())) {
+				students[i]= null;
+				students[i]=students[count-1];
+				students[count-1]= null;
+				//count = count-1;
+				count--;
+				break;
+			}
+		}
+	}
+	// findStudentById(student.getId()).setPass(student.getPass());
+}//StudentBean t = findStudentById(student.getId());
+//t.setPass(student.getPass());
